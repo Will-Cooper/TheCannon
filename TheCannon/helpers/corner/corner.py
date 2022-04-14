@@ -401,6 +401,7 @@ def quantile(x, q, weights=None):
     * optional weights on x
 
     """
+    x = x[~np.isnan(x)]
     if weights is None:
         return np.percentile(x, [100. * qi for qi in q])
     else:
