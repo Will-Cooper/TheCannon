@@ -86,7 +86,9 @@ class Dataset(object):
         SNR: float
         """
         take = ivar > 0
-        SNR = float(np.median(flux[take]*(ivar[take]**0.5)))
+        SNR = float(np.nanmedian(flux[take]*(ivar[take]**0.5)))
+        if np.isnan(SNR):
+            return 0.
         return SNR  
 
 
@@ -452,8 +454,8 @@ class Dataset(object):
             orig = reference_labels[:,i]
             cannon = test_labels[:,i]
             # calculate bias and scatter
-            scatter = np.round(np.std(orig-cannon),5)
-            bias  = np.round(np.mean(orig-cannon),5)
+            scatter = np.round(np.nanstd(orig-cannon),5)
+            bias  = np.round(np.nanmean(orig-cannon),5)
 
             low = np.minimum(min(orig), min(cannon))
             high = np.maximum(max(orig), max(cannon))
@@ -480,8 +482,8 @@ class Dataset(object):
             ax1.set_title("1-1 Plot of Label " + r"$%s$" % name)
             diff = cannon-orig
             npoints = len(diff)
-            mu = np.mean(diff)
-            sig = np.std(diff)
+            mu = np.nanmean(diff)
+            sig = np.nanstd(diff)
             #ax2.hist(diff, orientation='horizontal')
             ax2.hist(diff, range=[-3*sig,3*sig], color='k', bins=int(np.sqrt(npoints)),
                     orientation='horizontal', alpha=0.3, histtype='stepfilled')
@@ -493,7 +495,7 @@ class Dataset(object):
             ax2.set_title("Training Versus Test Labels for $%s$" %name,
                     fontsize=14)
             ax2.legend(fontsize=14)
-            figname_full = "%s_%s.png" %(figname, i)
+            figname_full = "%s_%s.pdf" %(figname, i)
             plt.savefig(figname_full)
             print("Diagnostic for label output vs. input")
             print("Saved fig %s" % figname_full)

@@ -184,7 +184,7 @@ def corner(xs, bins=20, range=None, weights=None, color="k",
                          "Use 'range' instead.")
             range = hist2d_kwargs.pop("extents")
         else:
-            range = [[x.min(), x.max()] for x in xs]
+            range = [[np.nanmin(x), np.nanmax(x)] for x in xs]
             # Check for parameters that never change.
             m = np.array([e[0] == e[1] for e in range], dtype=bool)
             if np.any(m):
@@ -258,7 +258,7 @@ def corner(xs, bins=20, range=None, weights=None, color="k",
             ax = axes[i, i]
         # Plot the histograms.
         if smooth1d is None:
-            n, _, _ = ax.hist(x, bins=bins[i], weights=weights,
+            n, _, _ = ax.hist(x, bins=None, weights=weights,
                               range=range[i], **hist_kwargs)
         else:
             if gaussian_filter is None:

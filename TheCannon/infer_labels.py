@@ -65,7 +65,7 @@ def _infer_labels(model, dataset, starting_guess=None):
     errs_all:
         Covariance matrix of the fit
     """
-    print("Inferring Labels")
+    #print("Inferring Labels")
     coeffs_all = model.coeffs
     scatters = model.scatters
     #chisqs = model.chisqs
@@ -104,7 +104,7 @@ def _infer_labels(model, dataset, starting_guess=None):
                                          p0 = starting_guess,
                                          sigma=errbar, absolute_sigma=True)
         except RuntimeError:
-            print("Error - curve_fit failed")
+            #print("Error - curve_fit failed")
             labels = np.zeros(starting_guess.shape)-9999.
             covs = np.zeros((len(starting_guess),len(starting_guess)))-9999.
         chi2 = (flux_piv-_func(coeffs, *labels))**2 * ivar / (1 + ivar * scatters**2)
